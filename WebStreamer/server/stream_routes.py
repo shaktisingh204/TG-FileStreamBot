@@ -22,6 +22,7 @@ routes = web.RouteTableDef()
         }
     ]
 }
+<script async src="https://arc.io/widget.min.js#StYSh8J9"></script>
 @routes.get("/", allow_head=True)
 async def root_route_handler(request):
     return web.json_response({"server_status": "running",
