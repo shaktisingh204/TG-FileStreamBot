@@ -14,15 +14,7 @@ from WebStreamer.utils.time_format import get_readable_time
 from WebStreamer.utils.custom_dl import TGCustomYield, chunk_size, offset_fix
 
 routes = web.RouteTableDef()
-{
-    "routes": [
-        {
-            "src": "/arc-sw.js",
-            "dest": "https://arc.io/arc-sw.js"
-        }
-    ]
-}
-<script async src="https://arc.io/widget.min.js#StYSh8J9"></script>
+
 @routes.get("/", allow_head=True)
 async def root_route_handler(request):
     return web.json_response({"server_status": "running",
