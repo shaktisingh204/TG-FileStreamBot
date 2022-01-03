@@ -1,7 +1,6 @@
 # This file is a part of TG-FileStreamBot
 # Coding : Jyothis Jayanth [@EverythingSuckz]
 
-
 import sys
 import glob
 import asyncio
@@ -14,20 +13,17 @@ from pathlib import Path
 from pyrogram import idle
 from WebStreamer import bot_info
 from WebStreamer.vars import Var
-from WebStreamer.bot import StreamBot
 from WebStreamer.server import web_server
 from WebStreamer.utils.keepalive import ping_server
-from apscheduler.schedulers.background import BackgroundScheduler
 
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
-logging.getLogger("apscheduler").setLevel(logging.WARNING)
-logging.getLogger("aiohttp").setLevel(logging.WARNING)
-
+logging.getLogger("pyrogram").setLevel(logging.ERROR)
+logging.getLogger("aiohttp").setLevel(logging.ERROR)
+logging.getLogger("aiohttp.web").setLevel(logging.ERROR)
 
 loop = asyncio.get_event_loop()
 
@@ -52,13 +48,11 @@ async def start_services():
     if Var.ON_HEROKU:
         print('------------------ Starting Keep Alive Service ------------------')
         print('\n')
-        scheduler = BackgroundScheduler()
-        scheduler.add_job(ping_server, "interval", seconds=1200)
-        scheduler.start()
+        await asyncio.create_task(ping_server())
     print('-------------------- Initalizing Web Server --------------------')
     app = web.AppRunner(await web_server())
     await app.setup()
-    bind_address = "0.0.0.0" if Var.ON_HEROKU else Var.BIND_ADRESS
+    bind_address = "0.0.0.0" if Var.ON_HEROKU else Var.BIND_ADDRESS
     await web.TCPSite(app, bind_address, Var.PORT).start()
     print('----------------------------- DONE -----------------------------')
     print('\n')
